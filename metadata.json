@@ -1,0 +1,6 @@
+{
+  "name": "Weekly Budget",
+  "description": "Modern personal and shared budgeting app inspired by multi-contributor weekly cash flow spreadsheets with Google Drive sync, Room persistence, and portable backups.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
