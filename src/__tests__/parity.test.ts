@@ -146,6 +146,9 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
 
   it('encodes and decodes MasterCsvFormat v3 with multiline notes, comma sub_categories, preserved casing, and verified content_hash', () => {
     const seed = buildDefaultSeedSnapshot();
+    const periodId = seed.periods[0].id;
+    const accountId = seed.accounts[0].id;
+    const categoryId = seed.categories[0].id;
     seed.periods[0].note = 'Line 1 of cycle note\nLine 2 with "quotes", and comma';
     seed.accounts[0].name = 'BofA High-Yield';
     seed.categories[0].name = 'HOA & Housing';
@@ -164,12 +167,17 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
     const decoded = MasterCsvFormat.decode(encoded.csvText, true);
     expect(decoded.metadata.revision).toBe(5);
     expect(decoded.metadata.contentHash).toBe(encoded.metadata.contentHash);
-    expect(decoded.snapshot.periods[0].note).toBe(
+    expect(decoded.snapshot.periods.find((period) => period.id === periodId)?.note).toBe(
       'Line 1 of cycle note\nLine 2 with "quotes", and comma'
     );
-    expect(decoded.snapshot.accounts[0].name).toBe('BofA High-Yield');
-    expect(decoded.snapshot.categories[0].name).toBe('HOA & Housing');
-    expect(decoded.snapshot.categories[0].subCategories).toEqual([
+    expect(decoded.snapshot.accounts.find((account) => account.id === accountId)?.name).toBe(
+      'BofA High-Yield'
+    );
+    const decodedCategory = decoded.snapshot.categories.find(
+      (category) => category.id === categoryId
+    );
+    expect(decodedCategory?.name).toBe('HOA & Housing');
+    expect(decodedCategory?.subCategories).toEqual([
       'Rent',
       'HOA',
       'Home Insurance'
