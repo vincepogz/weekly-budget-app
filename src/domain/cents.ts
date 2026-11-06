@@ -28,12 +28,16 @@ export const CentsMath = {
   },
 
   parse(text: string): Cents {
+    return CentsMath.tryParse(text) ?? 0;
+  },
+
+  tryParse(text: string): Cents | null {
     const trimmed = text.replace(/\$/g, '').replace(/ /g, '').trim();
     if (!trimmed) return 0;
 
     let normalized: string;
     if (trimmed.includes(',')) {
-      if (!GROUPED_NUMBER_REGEX.test(trimmed)) return 0;
+      if (!GROUPED_NUMBER_REGEX.test(trimmed)) return null;
       normalized = trimmed.replace(/,/g, '');
     } else {
       normalized = trimmed;
@@ -42,7 +46,7 @@ export const CentsMath = {
     const match = PLAIN_DECIMAL_REGEX.exec(normalized);
     if (!match) {
       const num = Number(normalized);
-      if (!Number.isFinite(num)) return 0;
+      if (!Number.isFinite(num)) return null;
       const sign = num < 0 ? -1 : 1;
       return sign * Math.round(Math.abs(num) * 100);
     }

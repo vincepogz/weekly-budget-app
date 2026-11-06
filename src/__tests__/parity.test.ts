@@ -31,6 +31,8 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
     expect(CentsMath.parse('-0.50')).toBe(-50);
     expect(CentsMath.parse('1.005')).toBe(101);
     expect(CentsMath.parse('12,34')).toBe(0); // invalid comma grouping rejected
+    expect(CentsMath.tryParse('12,34')).toBeNull();
+    expect(CentsMath.tryParse('0')).toBe(0);
     expect(CentsMath.toPlain(123456)).toBe('1234.56');
     expect(CentsMath.toPlain(-50)).toBe('-0.50');
     expect(CentsMath.toPlain(0)).toBe('0.00');
