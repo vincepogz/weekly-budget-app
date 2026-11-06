@@ -1,22 +1,36 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Weekly Budget App (Web Companion)
 
-# Run and deploy your AI Studio app
+Static single-page web application deployable to **GitHub Pages** with 100% feature, math, theme, and sync compatibility with the Android **Weekly Budget** app.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/3a026687-46b0-472b-89dc-a639f2ee60cc
+- **100% Android Master CSV v3 Sync Compatibility (`weekly-budget-master.csv`):**
+  - Identical `#TABLE,meta` header (`format_version=3`, `sync_protocol=3`, SHA-256 `content_hash`, revision counter, and 20-ancestor lineage trail).
+  - Row-level 32-character SHA-256 fingerprints (`SyncFingerprints`) and 3-way merge (`ThreeWayMerge` + `SyncPlanner` + `SyncEngine`).
+  - Automatic `.trash/` rolling safety snapshots (up to 10 revisions) and `reports/` summary CSVs.
+  - Deterministic UUIDv3 recurring transaction IDs (`UUID.nameUUIDFromBytes("recurring|" + ruleId + "|" + date)`) so both phone and web materialize due recurring rules with identical IDs.
+- **Native Google Drive Sync (`Link Folder` → `Google Account Chooser` → `Choose Folder`):**
+  - Click **Link Folder** in the top bar or Settings → select your Google account in the Google OAuth popup → browse or create a folder in Google Drive → sync directly with the same folder linked on your Android phone.
+  - Also supports local directory linking via the Browser File System Access API and direct CSV import/export.
+- **All 5 Tabs & 6 Material 3 Palettes:**
+  - **Cash flow**, **Budget**, **Dashboard** (default), **Ledger** (with session-retained reconciliation date), and **Settings**.
+  - **Emerald**, **Deep Ocean**, **Forest Glow**, **Midnight Violet**, **Ember**, and **Arctic** in **System**, **Light**, and **Dark** modes.
 
-## Run Locally
+## Publishing to GitHub Pages
 
-**Prerequisites:**  [Android Studio](https://developer.android.com/studio)
+1. Push this repository to GitHub:
+   ```bash
+   git remote add origin https://github.com/<your-username>/weekly-budget-app.git
+   git branch -M main
+   git push -u origin main
+   ```
+2. In your GitHub repository, go to **Settings → Pages** and set **Build and deployment → Source** to **GitHub Actions**.
+3. *(Optional)* To pre-configure your Google Cloud OAuth Web Client ID at build time, add `VITE_GOOGLE_CLIENT_ID` under **Settings → Secrets and variables → Actions → Variables** (or enter it directly inside the web app's **Settings → OAuth Client ID** dialog).
 
+## Local Development
 
-1. Open Android Studio
-2. Select **Open** and choose the directory containing this project
-3. Allow Android Studio to fix any incompatibilities as it imports the project.
-4. Create a file named `.env` in the project directory and set `GEMINI_API_KEY` in that file to your Gemini API key (see `.env.example` for an example)
-5. Remove this line from the app's `build.gradle.kts` file: `signingConfig = signingConfigs.getByName("debugConfig")`
-6. Run the app on an emulator or physical device
-7. If you have already published your app in AI Studio, please [request upload key reset](https://support.google.com/googleplay/android-developer/answer/9842756#zippy=%2Crequest-an-upload-key-reset) in Google Play Console.
+```bash
+npm install
+npm test
+npm run dev
+```

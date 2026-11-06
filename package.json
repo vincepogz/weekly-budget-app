@@ -1,0 +1,27 @@
+{
+  "name": "weekly-budget-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Weekly Budget App — Web companion with 100% Android Master CSV v3 & Google Drive sync compatibility",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1",
+    "vitest": "^2.1.8"
+  }
+}
