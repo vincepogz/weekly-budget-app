@@ -79,8 +79,7 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
     expect(plusMonthsIso('2024-01-31', 1)).toBe('2024-02-29'); // leap year
     expect(CyclePlanner.computeEndDate('2026-01-05', 52)).toBe('2027-01-03');
 
-    const dueList = RecurringSchedule.dueOccurrences(
-      {
+    const recurringRule = {
         id: 'rule-jan31',
         title: 'Rent',
         amount: 200000,
@@ -94,11 +93,13 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
         nextDueDate: '2026-01-31',
         active: true,
         cleared: true
-      },
-      '2026-04-01'
-    );
-    expect(dueList.dueDates).toEqual(['2026-01-31', '2026-02-28', '2026-03-31']);
-    expect(dueList.nextDueAfterToday).toBe('2026-04-30');
+      };
+    expect(RecurringSchedule.dueDates(recurringRule, '2026-04-01')).toEqual([
+      '2026-01-31',
+      '2026-02-28',
+      '2026-03-31'
+    ]);
+    expect(RecurringSchedule.nextDueAfter(recurringRule, '2026-03-31')).toBe('2026-04-30');
   });
 
   it('classifies and partitions cycles into Current, Upcoming, and Past', () => {
@@ -156,7 +157,7 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
     expect(encoded.csvText).toContain('#TABLE,meta');
     expect(encoded.csvText).toContain('format_version,3');
     expect(encoded.csvText).toContain('sync_protocol,3');
-    expect(encoded.csvText).toContain('"Rent,HOA,Home Insurance"');
+    expect(encoded.csvText).toContain('"Rent, HOA, Home Insurance"');
 
     const decoded = MasterCsvFormat.decode(encoded.csvText, true);
     expect(decoded.metadata.revision).toBe(5);
@@ -363,7 +364,10 @@ describe('Android <-> Web Domain & Sync Parity Suite', () => {
     expect(phonePush.kind).toBe('Success');
 
     const webMerge = await webEngine.sync(folder);
-    expect(webMerge.kind).toBe('Success');
+    expect(
+      webMerge.kind,
+      webMerge.kind === 'NeedsAttention' ? webMerge.message : 'Expected a successful merge'
+    ).toBe('Success');
     if (webMerge.kind === 'Success') {
       expect(webMerge.summary.direction).toBe('MERGED');
     }
