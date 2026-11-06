@@ -486,6 +486,8 @@ export const BudgetProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           currentPeriod.id,
           accountsMap,
           todayIso(),
+          Date.now(),
+          400,
           loadedSnapshot.periods
         );
         if (mat.newTransactions.length > 0 || mat.updatedRules.length > 0) {
